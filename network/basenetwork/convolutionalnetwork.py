@@ -168,3 +168,16 @@ if __name__ == "__main__":
     print(f"conv4 shape: {conv4.shape}")
     print(f"conv5 shape: {conv5.shape}")
     print(f"conv6 shape: {conv6.shape}")
+    
+    device = "cuda:0" if torch.cuda.is_available() else "cpu"
+    
+    convolutional_model.to(device=device)
+    t_input = torch.rand((1,3,224,224), dtype=torch.float32, device=device)
+    out, conv1, conv2, conv3, conv4, conv5, conv6 = convolutional_model(t_input)
+    print(f"out shape: {out.shape}")
+    print(f"conv1 shape: {conv1.shape}")
+    print(f"conv2 shape: {conv2.shape}")
+    print(f"conv3 shape: {conv3.shape}")
+    print(f"conv4 shape: {conv4.shape}")
+    print(f"conv5 shape: {conv5.shape}")
+    print(f"conv6 shape: {conv6.shape}")
