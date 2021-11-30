@@ -7,10 +7,13 @@ from torch import nn
 from torch.nn.functional import relu as ReLU
 
 class ConvolutionalNetwork(nn.Module):
+    """Convolutional neural network
+
+    :param nn: the base nn.Module from how to inherit
+    :type nn: torch.nn
+    """
     def __init__(self, input_channel: int, pooling: bool = False, pooling_type: str = "Max") -> None:
-        """ Init method for Convolutional neural network
-        
-        """
+        #%Init method for Convolutional neural network
         super(ConvolutionalNetwork, self).__init__()
         conv_kernel_size = (3,3)
         pooling_kernel_size = (2,2)
@@ -96,14 +99,12 @@ class ConvolutionalNetwork(nn.Module):
         self.conv6_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=conv_kernel_size, stride=1, padding=1)
         self.conv6_3 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=conv_kernel_size, stride=1)
         
-        
-        
     def forward(self, input_img):
         """Forward pass for the convolutional neural network
 
         :param input_img: the input image
         :type input_img: torch.Tensor
-        :return: convolutional output that is the extracted features from the images ad different layer
+        :return: convolutional output that is the extracted features from the images
         :rtype: tuple[torch.Tensor]
         """
         #256x256
@@ -155,8 +156,7 @@ class ConvolutionalNetwork(nn.Module):
         return x, conv1_out, conv2_out, conv3_out, conv4_out, conv5_out, conv6_out
 
 if __name__ == "__main__":
-    """Testing the class
-    """
+    #Testing Network
     import torch
     convolutional_model = ConvolutionalNetwork(input_channel=3, pooling=True, pooling_type="Avg")
     t_input = torch.rand((1,3,224,224), dtype=torch.float32)
