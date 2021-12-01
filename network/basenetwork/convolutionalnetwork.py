@@ -1,5 +1,6 @@
 """Convolutional neural network for features extraction from images
 
+:author: Marco Mameli
 :return: Convolutional neural network
 :rtype: torch.nn.Module
 """
