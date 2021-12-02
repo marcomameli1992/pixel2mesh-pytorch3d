@@ -16,7 +16,7 @@ class GraphConvolutionalBlock(nn.Module):
         
         self.activation = ReLU()
         
-        self.gc1 = GraphConv(input_dim=input_dim, output_dim=output_dim) # First GraphConvolutional Block
+        self.gc1 = GraphConv(input_dim=input_dim, output_dim=output_dim)
         
         self.gc_module = ModuleList(
             [GraphConv(input_dim=output_dim, output_dim=output_dim) for n in range(hidden_layer_count)]
