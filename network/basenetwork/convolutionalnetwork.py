@@ -7,7 +7,7 @@
 from torch import nn
 from torch.nn.functional import relu as ReLU
 
-class ConvolutionalNetwork(nn.Module):
+class Convolutional(nn.Module):
     """Convolutional neural network
 
     :param nn: the base nn.Module from how to inherit
@@ -15,7 +15,7 @@ class ConvolutionalNetwork(nn.Module):
     """
     def __init__(self, input_channel: int, pooling: bool = False, pooling_type: str = "Max") -> None:
         #%Init method for Convolutional neural network
-        super(ConvolutionalNetwork, self).__init__()
+        super(Convolutional, self).__init__()
         conv_kernel_size = (3,3)
         pooling_kernel_size = (2,2)
         self.pooling = pooling
@@ -159,7 +159,7 @@ class ConvolutionalNetwork(nn.Module):
 if __name__ == "__main__":
     #Testing Network
     import torch
-    convolutional_model = ConvolutionalNetwork(input_channel=3, pooling=True, pooling_type="Avg")
+    convolutional_model = Convolutional(input_channel=3, pooling=True, pooling_type="Avg")
     t_input = torch.rand((1,3,224,224), dtype=torch.float32)
     out, conv1, conv2, conv3, conv4, conv5, conv6 = convolutional_model(t_input)
     print(f"out shape: {out.shape}")
