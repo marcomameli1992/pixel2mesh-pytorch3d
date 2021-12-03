@@ -13,10 +13,17 @@
             "console": "integratedTerminal"
         },
         {
-            "name": "Python: GraphConvolutionalNetwork",
+            "name": "Python: GraphNetwork",
             "type": "python",
             "request": "launch",
             "program": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/network/basenetwork/graphnetwork.py",
+            "console": "integratedTerminal"
+        },
+        {
+            "name": "Python: GraphConvolutionalNetwork",
+            "type": "python",
+            "request": "launch",
+            "program": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/network/basenetwork/graphconvolutionalnetwork.py",
             "console": "integratedTerminal"
         }
     ]
