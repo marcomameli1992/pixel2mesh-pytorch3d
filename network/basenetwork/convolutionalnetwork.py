@@ -5,7 +5,7 @@
 :rtype: torch.nn.Module
 """
 from torch import nn
-from torch.nn.functional import relu as ReLU
+from torch.nn import ReLU
 
 class Convolutional(nn.Module):
     """Convolutional neural network
@@ -19,6 +19,9 @@ class Convolutional(nn.Module):
         conv_kernel_size = (3,3)
         pooling_kernel_size = (2,2)
         self.pooling = pooling
+        
+        # activation function
+        self.activation = ReLU()
         
         #%224x224
         self.conv1_1 = nn.Conv2d(in_channels=input_channel, out_channels=16, kernel_size=conv_kernel_size, stride=1)
@@ -109,49 +112,49 @@ class Convolutional(nn.Module):
         :rtype: tuple[torch.Tensor]
         """
         #256x256
-        x = ReLU(self.conv1_1(input_img))
-        x = ReLU(self.conv1_2(x))
+        x = self.activation(self.conv1_1(input_img))
+        x = self.activation(self.conv1_2(x))
         conv1_out = x.clone().detach()
         #128x128
         if self.pooling:
             x = self.conv1_3(x)
         else:
-            x = ReLU(self.conv1_3(x))
-        x = ReLU(self.conv2_1(x))
-        x = ReLU(self.conv2_2(x))
+            x = self.activation(self.conv1_3(x))
+        x = self.activation(self.conv2_1(x))
+        x = self.activation(self.conv2_2(x))
         conv2_out = x.clone().detach()
         #56x56
         if self.pooling:
             x = self.conv2_3(x)
         else:
-            x = ReLU(self.conv2_3(x))
-        x = ReLU(self.conv3_1(x))
-        x = ReLU(self.conv3_2(x))
+            x = self.activation(self.conv2_3(x))
+        x = self.activation(self.conv3_1(x))
+        x = self.activation(self.conv3_2(x))
         conv3_out = x.clone().detach()
         #28x28
         if self.pooling:
             x = self.conv3_3(x)
         else:
-            x = ReLU(self.conv3_3(x))
-        x = ReLU(self.conv4_1(x))
-        x = ReLU(self.conv4_2(x))
+            x = self.activation(self.conv3_3(x))
+        x = self.activation(self.conv4_1(x))
+        x = self.activation(self.conv4_2(x))
         conv4_out = x.clone().detach()
         #14x14
         if self.pooling:
             x = self.conv4_3(x)
         else:
-            x = ReLU(self.conv4_3(x))
-        x = ReLU(self.conv5_1(x))
-        x = ReLU(self.conv5_2(x))
+            x = self.activation(self.conv4_3(x))
+        x = self.activation(self.conv5_1(x))
+        x = self.activation(self.conv5_2(x))
         conv5_out = x.clone().detach()
         #7x7
         if self.pooling:
             x = self.conv5_3(x)
         else:
-            x = ReLU(self.conv5_3(x))
-        x = ReLU(self.conv6_1(x))
-        x = ReLU(self.conv6_2(x))
-        x = ReLU(self.conv6_3(x))
+            x = self.activation(self.conv5_3(x))
+        x = self.activation(self.conv6_1(x))
+        x = self.activation(self.conv6_2(x))
+        x = self.activation(self.conv6_3(x))
         conv6_out = x.clone().detach()
         
         return x, conv1_out, conv2_out, conv3_out, conv4_out, conv5_out, conv6_out
