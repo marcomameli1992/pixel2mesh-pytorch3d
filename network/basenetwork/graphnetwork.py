@@ -7,7 +7,6 @@
 
 from torch import nn
 from torch.nn import ReLU
-from torch._C import Graph
 from torch.nn import ModuleList
 from pytorch3d.ops import vert_align, GraphConv
 from pytorch3d.ops.subdivide_meshes import SubdivideMeshes
@@ -63,7 +62,7 @@ class GraphConvolution(nn.Module):
         :rtype: torch.Tensor (it can be changed in pytorch3d.io.Mesh)
         """
         
-        #TODO Check if it is possible to use batches
+        #TODO Check if it is possible to use batches for the moment not is possible
         
         vert_features_from_conv64 = vert_align(conv64, mesh)
         
