@@ -4,7 +4,13 @@
     // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
-    
+        {
+            "name": "Python: Pixel2Mesh",
+            "type": "python",
+            "request": "launch",
+            "program": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/network/pix2mesh.py",
+            "console": "integratedTerminal"
+        },
         {
             "name": "Python: ConvolutionalNetwork",
             "type": "python",
