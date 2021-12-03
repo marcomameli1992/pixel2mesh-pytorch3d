@@ -1,4 +1,7 @@
 {
     "autoDocstring.docstringFormat": "sphinx",
-    "todo-tree.tree.showBadges": false
+    "todo-tree.tree.showBadges": false,
+    "python.analysis.extraPaths": [
+        "./network"
+    ]
 }

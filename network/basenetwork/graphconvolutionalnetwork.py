@@ -11,16 +11,16 @@ from torch.nn import ReLU
 from pytorch3d.ops import vert_align
 from pytorch3d.ops.subdivide_meshes import SubdivideMeshes
 from pytorch3d.structures.meshes import Meshes
-from baseblock.graph.graphblock import GraphConvolutionalBlock
+from .baseblock.graph.graphblock import GraphConvolutionalBlock
 
-class GraphConvolution(Module):
+class GraphConvolutional(Module):
     """Graph Convolutional Network configuration
 
     :param Module: torch module for network
     :type Module: Module type
     """
     def __init__(self, first_block_input_dim: int, second_block_input_dim: int, third_block_input_dim, hidden_dim: int, output_dim: int, hidden_layer_count: int = 12):
-        super(GraphConvolution, self).__init__()
+        super(GraphConvolutional, self).__init__()
         
         # Activation function
         self.activation = ReLU()
