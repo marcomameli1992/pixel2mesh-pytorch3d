@@ -155,17 +155,16 @@ class Convolutional(nn.Module):
         x = self.activation(self.conv6_1(x))
         x = self.activation(self.conv6_2(x))
         x = self.activation(self.conv6_3(x))
-        conv6_out = x.clone().detach()
+        conv6_out = x
         
-        return x, conv1_out, conv2_out, conv3_out, conv4_out, conv5_out, conv6_out
+        return conv1_out, conv2_out, conv3_out, conv4_out, conv5_out, conv6_out
 
 if __name__ == "__main__":
     #Testing Network
     import torch
     convolutional_model = Convolutional(input_channel=3, pooling=True, pooling_type="Avg")
     t_input = torch.rand((1,3,224,224), dtype=torch.float32)
-    out, conv1, conv2, conv3, conv4, conv5, conv6 = convolutional_model(t_input)
-    print(f"out shape: {out.shape}")
+    conv1, conv2, conv3, conv4, conv5, conv6 = convolutional_model(t_input)
     print(f"conv1 shape: {conv1.shape}")
     print(f"conv2 shape: {conv2.shape}")
     print(f"conv3 shape: {conv3.shape}")
@@ -177,8 +176,7 @@ if __name__ == "__main__":
     
     convolutional_model.to(device=device)
     t_input = torch.rand((1,3,224,224), dtype=torch.float32, device=device)
-    out, conv1, conv2, conv3, conv4, conv5, conv6 = convolutional_model(t_input)
-    print(f"out shape: {out.shape}")
+    conv1, conv2, conv3, conv4, conv5, conv6 = convolutional_model(t_input)
     print(f"conv1 shape: {conv1.shape}")
     print(f"conv2 shape: {conv2.shape}")
     print(f"conv3 shape: {conv3.shape}")
