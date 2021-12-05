@@ -11,7 +11,7 @@ from torch.nn import ReLU
 from pytorch3d.ops import vert_align
 from pytorch3d.ops.subdivide_meshes import SubdivideMeshes
 from pytorch3d.structures.meshes import Meshes
-from .baseblock.graph.graphblock import GraphConvolutionalBlock
+from baseblock.graph.graphblock import GraphConvolutionalBlock
 
 class GraphConvolutional(Module):
     """Graph Convolutional Network configuration
@@ -110,7 +110,7 @@ if __name__ == "__main__":
     conv256 = torch.rand((2, 256, 12, 12), dtype=torch.float32, device=device)
     conv512 = torch.rand((2, 512, 3, 3), dtype=torch.float32, device=device)
     
-    gcn = GraphConvolution(first_block_input_dim=64, second_block_input_dim=128, third_block_input_dim=256, hidden_dim=256 , output_dim = 3) # Need to understand the input dimension and the internal dimension how work
+    gcn = GraphConvolutional(first_block_input_dim=64, second_block_input_dim=128, third_block_input_dim=256, hidden_dim=256 , output_dim = 3) # Need to understand the input dimension and the internal dimension how work
     gcn = gcn.to(device=device) # Move on GPU
     
     for i in range(2):
