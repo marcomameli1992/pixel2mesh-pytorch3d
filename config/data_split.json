@@ -1,0 +1,7 @@
+{
+  "start_folder": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M/",
+  "image_name": "00.png",
+  "save_folder": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/data/dataloader/data_list/",
+  "test_percentage": 0.2,
+  "validation_percentage": 0.1
+}
