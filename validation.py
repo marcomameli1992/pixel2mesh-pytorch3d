@@ -8,11 +8,12 @@ from pytorch3d.structures import Meshes
 from torch import nn
 from torch.utils.data import DataLoader
 from pytorch3d import loss as l3d
-from pytorch3d.io import load_objs_as_meshes, load_obj
+from pytorch3d.io import save_obj, load_obj
 from pytorch3d.utils import ico_sphere
 from pytorch3d.ops.subdivide_meshes import SubdivideMeshes
 from pytorch3d.ops.sample_points_from_meshes import sample_points_from_meshes
 import neptune.new as neptune
+from utils.plotting import plot_pointcloud
 
 def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, validation_dataloader: DataLoader, device:str, run=None) -> None:
     """
@@ -38,9 +39,8 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
             # forward + backward + optimize
             conv16, conv32, conv64, conv128, conv256, conv512 = convolutional_model(data['image'])
 
-            mesh1_loss_on_batch = 0.0
-            mesh2_loss_on_batch = 0.0
-            mesh3_loss_on_batch = 0.0
+
+
             if len(conv16.shape()) == 4 or len(conv32.shape()) == 4 or len(conv64.shape()) == 4 or \
                     len(conv128.shape()) == 4 or len(conv256.shape()) == 4 or len(conv512.shape()) == 4:
                 # Batch size different from 1
@@ -151,7 +151,33 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
                         run["validation/point_medhe_face_distance_1"].log(point_medhe_face_distance_1)
                         run["validation/point_medhe_face_distance_2"].log(point_medhe_face_distance_2)
                         run["validation/point_medhe_face_distance_3"].log(point_medhe_face_distance_3)
+                        run["validation/label_mesh1"].log(plot_pointcloud(label_mesh1))
+                        run["validation/label_mesh2"].log(plot_pointcloud(label_mesh2))
+                        run["validation/label_mesh3"].log(plot_pointcloud(label_mesh3))
+                        run["validation/generated_mesh1"].log(plot_pointcloud(mesh1))
+                        run["validation/generated_mesh2"].log(plot_pointcloud(mesh2))
+                        run["validation/generated_mesh3"].log(plot_pointcloud(mesh3))
                     elif config['w&b']['activate']:
                         wandb.log(
                             evaluate
                         )
+                        # saving mesh to file for the logging
+                        save_obj(f=config['save_obj'] + 'generated_mesh1.obj', verts=mesh1.verts_list(), faces=mesh1.faces_list())
+                        save_obj(f=config['save_obj'] + 'generated_mesh2.obj', verts=mesh2.verts_list(),
+                                 faces=mesh2.faces_list())
+                        save_obj(f=config['save_obj'] + 'generated_mesh3.obj', verts=mesh3.verts_list(),
+                                 faces=mesh3.faces_list())
+                        save_obj(f=config['save_obj'] + 'subdivided_label_mesh1.obj', verts=label_mesh2.verts_list(),
+                                 faces=label_mesh2.faces_list())
+                        save_obj(f=config['save_obj'] + 'subdivided_label_mesh2.obj', verts=label_mesh3.verts_list(),
+                                 faces=label_mesh3.faces_list())
+                        wandb.log({
+                            "validation_label_mesh1": wandb.Object3D(open(label_mesh_path)),
+                            "validation_label_mesh2": wandb.Object3D(open(config['save_obj'] + 'subdivided_label_mesh1.obj')),
+                            "validation_label_mesh3": wandb.Object3D(open(config['save_obj'] + 'subdivided_label_mesh2.obj')),
+                            "validation_generated_mesh1": wandb.Object3D(open(config['save_obj'] + 'generated_mesh1.obj')),
+                            "validation_generated_mesh2": wandb.Object3D(
+                                open(config['save_obj'] + 'generated_mesh2.obj')),
+                            "validation_generated_mesh3": wandb.Object3D(
+                                open(config['save_obj'] + 'generated_mesh3.obj')),
+                        })
