@@ -102,6 +102,8 @@ class Convolutional(nn.Module):
             self.conv6_1 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=conv_kernel_size, stride=1)
         self.conv6_2 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=conv_kernel_size, stride=1, padding=1)
         self.conv6_3 = nn.Conv2d(in_channels=512, out_channels=512, kernel_size=conv_kernel_size, stride=1)
+
+        # TODO adding fully connected for pre-training
         
     def forward(self, input_img):
         """Forward pass for the convolutional neural network
@@ -156,6 +158,8 @@ class Convolutional(nn.Module):
         x = self.activation(self.conv6_2(x))
         x = self.activation(self.conv6_3(x))
         conv6_out = x
+
+        #TODO use the fully connected for the classification and use it as output
         
         return conv1_out, conv2_out, conv3_out, conv4_out, conv5_out, conv6_out
 
