@@ -2,5 +2,29 @@
   "img_name": "00",
   "obj_name": "model_normalized",
   "obj_base_path": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetCorev2/",
-  "img_base_path": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M/"
+  "img_base_path": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M/",
+  "loss_weights": {
+    "chamfer": 1.0,
+    "edge": 1.0,
+    "laplacian": 0.1,
+    "normal": 0.01
+  },
+  "training": {
+    "epochs": 5,
+    "pretraing_convnet": false,
+    "train_convnet": true,
+    "learning_rate": 0.001,
+    "optmizer": "sgd",
+    "momentum": 0.9999
+  },
+  "neptune": {
+    "activate": true,
+    "project": "",
+    "api_token": ""
+  },
+  "w&b": {
+    "activate": true,
+    "project": "",
+    "entity": ""
+  }
 }
