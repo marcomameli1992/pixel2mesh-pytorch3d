@@ -21,6 +21,16 @@ class ShapeNetDataset(Dataset):
     """
 
     def __init__(self, dataset_file_path: str, img_dataset_path: str, model_dataset_path: str, img_name: str, split: str, load_textures: bool = False):
+        """
+        Initialize the Dataset
+        Args:
+            dataset_file_path: the dataset position
+            img_dataset_path: the image path for the dataset
+            model_dataset_path: the obj path for the dataset
+            img_name: the image name
+            split: define if you want the train/validation/test/split
+            load_textures: loading texture for the obj
+        """
         #% Init the dataset with the generation of the file list and object list
 
         self.transform = transforms.Compose([transforms.ToTensor()])
@@ -61,7 +71,7 @@ class ShapeNetDataset(Dataset):
 
 if __name__ == "__main__":
     from torch.utils.data import DataLoader
-    dataset = ShapeNetDataset(dataset_file_path='/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/data/dataloader/data_list/', img_dataset_path="/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M", model_dataset_path="/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetCorev2", img_name='00', split='test')
+    dataset = ShapeNetDataset(dataset_file_path='/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/data/datasetmanagement/data_list/', img_dataset_path="/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M", model_dataset_path="/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetCorev2", img_name='00', split='test')
     dataloader = DataLoader(dataset=dataset, batch_size=2)
     img = next(iter(dataloader))
     print(img['image'].shape,img['img_path'], img['class']) # the dictionary has the image element has tensor of image tensor and the img_path as list of string
