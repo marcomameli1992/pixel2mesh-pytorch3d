@@ -4,10 +4,11 @@
 
 import torch
 import wandb
+from pytorch3d.structures import Meshes
 from torch import nn
 from torch.utils.data import DataLoader
 from pytorch3d import loss as l3d
-from pytorch3d.io import load_objs_as_meshes
+from pytorch3d.io import load_objs_as_meshes, load_obj
 from pytorch3d.utils import ico_sphere
 from pytorch3d.ops.subdivide_meshes import SubdivideMeshes
 from pytorch3d.ops.sample_points_from_meshes import sample_points_from_meshes
@@ -49,7 +50,54 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
                                                                config['obj_base_path']).replace(
                         '/rendering/' + config['img_name'] + '.png', '/models/' + config['obj_name'] + '.obj')
 
-                    label_mesh1 = load_objs_as_meshes([label_mesh_path], device=device)
+                    # Read the target 3D model using load_obj
+                    verts, faces, aux = load_obj(label_mesh_path)
+
+                    # verts is a FloatTensor of shape (V, 3) where V is the number of vertices in the mesh
+                    # faces is an object which contains the following LongTensors: verts_idx, normals_idx and textures_idx
+                    # For this tutorial, normals and textures are ignored.
+                    faces_idx = faces.verts_idx.to(device)
+                    verts = verts.to(device)
+
+                    # We scale normalize and center the target mesh to fit in a sphere of radius 1 centered at (0,0,0).
+                    # (scale, center) will be used to bring the predicted mesh to its original center and scale
+                    # Note that normalizing the target mesh, speeds up the optimization but is not necessary!
+                    # as suggested in the pytorch3D tutorials: https://pytorch3d.org/tutorials/deform_source_mesh_to_target_mesh
+                    center = verts.mean(0)
+                    verts = verts - center
+                    scale = max(verts.abs().max(0)[0])
+                    verts = verts / scale
+
+                    # reconstruct the mesh
+                    label_mesh1 = Meshes(verts=[verts], faces=[faces_idx])
+
+                    # Subdivide label mesh for the losses
+                    label_mesh2 = subdivide(label_mesh1)
+                    label_mesh3 = subdivide(label_mesh2)
+
+                    if config['starting_mesh']['path'] != "None":
+                        # Read the target 3D model using load_obj
+                        verts, faces, aux = load_obj(config['starting_mesh']['path'])
+
+                        # verts is a FloatTensor of shape (V, 3) where V is the number of vertices in the mesh
+                        # faces is an object which contains the following LongTensors: verts_idx, normals_idx and textures_idx
+                        # For this tutorial, normals and textures are ignored.
+                        faces_idx = faces.verts_idx.to(device)
+                        verts = verts.to(device)
+
+                        # We scale normalize and center the target mesh to fit in a sphere of radius 1 centered at (0,0,0).
+                        # (scale, center) will be used to bring the predicted mesh to its original center and scale
+                        # Note that normalizing the target mesh, speeds up the optimization but is not necessary!
+                        # as suggested in the pytorch3D tutorials: https://pytorch3d.org/tutorials/deform_source_mesh_to_target_mesh
+                        center = verts.mean(0)
+                        verts = verts - center
+                        scale = max(verts.abs().max(0)[0])
+                        verts = verts / scale
+
+                        # reconstruct the mesh
+                        mesh = Meshes(verts=[verts], faces=[faces_idx])
+                    else:
+                        mesh = ico_sphere(level=config['starting_mesh']['ico_sphere_subdivide_level'], device=device)
                     label_mesh2 = subdivide(label_mesh1)
                     label_mesh3 = subdivide(label_mesh2)
 
