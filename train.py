@@ -18,6 +18,7 @@ from pytorch3d.ops.sample_points_from_meshes import sample_points_from_meshes
 import neptune.new as neptune
 import numpy as np
 from validation import validation
+import tqdm
 
 #TODO Adding the possibility to pre-train the convolutional network
 
@@ -65,9 +66,11 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     if config['training']['optimizer'] == "sgd":
         image_optimizer = optim.SGD(convolutional_model.parameters(), lr=config['training']['learning_rate'], momentum=config['training']['momentum'])
         mesh_optimizare = optim.SGD(graph_model.parameters(), lr=config['training']['learning_rate'], momentum=config['training']['momentum'])
-    if config['training']['optimizer'] == "adam":
+    elif config['training']['optimizer'] == "adam":
         image_optimizer = optim.Adam(convolutional_model.parameters(), lr=config['training']['learning_rate'])
         mesh_optimizare = optim.Adam(graph_model.parameters(), lr=config['training']['learning_rate'])
+    else:
+        raise NotImplementedError("Please in the config.json you have to specify an optimizer in [sgd, adam]")
 
     # model on GPU
     device = "cuda:0" if cuda.is_available() else "cpu"
@@ -78,9 +81,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     subdivide = SubdivideMeshes()
 
     # define the optimizer
-    for epoch in range(config['training']['epochs']):
+    for epoch in tqdm.tqdm(range(config['training']['epochs'])):
+        validation_loss = 0.0
         for i, data in enumerate(train_dataloader):
-            #
+            # reset grad
             image_optimizer.zero_grad()
             mesh_optimizare.zero_grad()
             
@@ -240,4 +244,8 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
             image_optimizer.step()
             mesh_optimizare.step()
 
-        validation(config, convolutional_model=convolutional_model, graph_model=graph_model, validation_dataloader=validation_dataloader, device=device, run=run)
+        new_validation_loss = validation(config, convolutional_model=convolutional_model, graph_model=graph_model, validation_dataloader=validation_dataloader, device=device, run=run)
+        if new_validation_loss < validation_loss:
+            # TODO save weight
+
+            validation_loss = new_validation_loss
