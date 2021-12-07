@@ -11,7 +11,7 @@ from torch.nn import ReLU
 from pytorch3d.ops import vert_align
 from pytorch3d.ops.subdivide_meshes import SubdivideMeshes
 from pytorch3d.structures.meshes import Meshes
-from baseblock.graph.graphblock import GraphConvolutionalBlock
+from network.basenetwork.baseblock.graph.graphblock import GraphConvolutionalBlock
 
 class GraphConvolutional(Module):
     """Graph Convolutional Network configuration
