@@ -3,6 +3,12 @@
   "obj_name": "model_normalized",
   "obj_base_path": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetCorev2/",
   "img_base_path": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M/",
+  "data_file_list": "/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/data/datasetmanagement/data_list/",
+  "save_obj": "./data/saving/",
+  "convolutional_network": {
+    "pooling": false,
+    "pooling_type": "Max"
+  },
   "loss_weights": {
     "chamfer": 1.0,
     "edge": 1.0,
@@ -14,8 +20,9 @@
     "pretraing_convnet": false,
     "train_convnet": true,
     "learning_rate": 0.001,
-    "optmizer": "sgd",
-    "momentum": 0.9999
+    "optimizer": "sgd",
+    "momentum": 0.9999,
+    "batch_size": 2
   },
   "neptune": {
     "activate": true,
@@ -26,5 +33,9 @@
     "activate": true,
     "project": "",
     "entity": ""
+  },
+  "starting_mesh": {
+    "path": "None",
+    "ico_sphere_subdivide_level": 1
   }
 }
