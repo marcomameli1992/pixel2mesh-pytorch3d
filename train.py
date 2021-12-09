@@ -153,13 +153,13 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     mesh1, mesh2, mesh3 = graph_model(mesh, conv64[i].unsqueeze(0), conv128[i].unsqueeze(0), conv256[i].unsqueeze(0))
 
                     # point cloud conversion
-                    point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=5000)
-                    point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=5000)
-                    point_label_mesh3 = sample_points_from_meshes(label_mesh3, num_samples=5000)
+                    point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=config['point_sampling_value'])
+                    point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=config['point_sampling_value'])
+                    point_label_mesh3 = sample_points_from_meshes(label_mesh3, num_samples=config['point_sampling_value'])
 
-                    point_mesh1 = sample_points_from_meshes(mesh1, num_samples=5000)
-                    point_mesh2 = sample_points_from_meshes(mesh2, num_samples=5000)
-                    point_mesh3 = sample_points_from_meshes(mesh3, num_samples=5000)
+                    point_mesh1 = sample_points_from_meshes(mesh1, num_samples=config['point_sampling_value'])
+                    point_mesh2 = sample_points_from_meshes(mesh2, num_samples=config['point_sampling_value'])
+                    point_mesh3 = sample_points_from_meshes(mesh3, num_samples=config['point_sampling_value'])
 
                     # chamfer distance
                     chamfer1 = l3d.chamfer_distance(point_mesh1, point_label_mesh1)
