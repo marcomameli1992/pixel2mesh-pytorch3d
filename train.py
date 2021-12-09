@@ -101,6 +101,8 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     label_mesh_path = data['img_path'][i].replace(config['img_base_path'], config['obj_base_path']).replace(
                         '/rendering/' + config['img_name'] + '.png', '/models/' + config['obj_name'] + '.obj')
 
+                    print(label_mesh_path)
+
                     # Read the target 3D model using load_obj
                     verts, faces, aux = load_obj(label_mesh_path)
 
@@ -109,6 +111,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # For this tutorial, normals and textures are ignored.
                     faces_idx = faces.verts_idx.to(device)
                     verts = verts.to(device)
+                    print(verts.shape)
 
                     # We scale normalize and center the target mesh to fit in a sphere of radius 1 centered at (0,0,0).
                     # (scale, center) will be used to bring the predicted mesh to its original center and scale
