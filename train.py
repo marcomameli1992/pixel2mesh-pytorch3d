@@ -156,6 +156,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
 
                     mesh1, mesh2, mesh3 = graph_model(mesh, conv64[i].unsqueeze(0), conv128[i].unsqueeze(0), conv256[i].unsqueeze(0))
 
+                    print(mesh1.verts_list().shape)
+                    print(mesh2.verts_list().shape)
+                    print(mesh3.verts_list().shape)
+
                     # point cloud conversion
                     point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=config['point_sampling_value'])
                     point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=config['point_sampling_value'])
