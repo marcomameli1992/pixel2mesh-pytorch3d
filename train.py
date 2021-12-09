@@ -179,9 +179,9 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     point_mesh3 = sample_points_from_meshes(mesh3, num_samples=config['point_sampling_value'])
 
                     # chamfer distance
-                    chamfer1 = l3d.chamfer_distance(point_mesh1, point_label_mesh1)
-                    chamfer2 = l3d.chamfer_distance(point_mesh2, point_label_mesh2)
-                    chamfer3 = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
+                    chamfer1, _ = l3d.chamfer_distance(point_mesh1, point_label_mesh1)
+                    chamfer2, _ = l3d.chamfer_distance(point_mesh2, point_label_mesh2)
+                    chamfer3, _ = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
                     print(type(chamfer1))
                     print(type(chamfer2))
                     print(type(chamfer3))
