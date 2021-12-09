@@ -1,0 +1,42 @@
+{
+  "img_name": "00",
+  "obj_name": "model_normalized",
+  "obj_base_path": "/home/vrai/ComputerGraphicsResearch/meshgeneration/Dataset/ShapeNet/ShapeNetCore/",
+  "img_base_path": "/home/vrai/ComputerGraphicsResearch/meshgeneration/Dataset/ShapeNet/ShapeNetP2M/",
+  "data_file_list": "./data/datasetmanagement/data_list/",
+  "save_obj": "./data/saving/",
+  "convolutional_network": {
+    "pooling": false,
+    "pooling_type": "Max"
+  },
+  "loss_weights": {
+    "chamfer": 1.0,
+    "edge": 1.0,
+    "laplacian": 0.1,
+    "normal": 0.01
+  },
+  "training": {
+    "epochs": 5,
+    "pretraing_convnet": false,
+    "train_convnet": true,
+    "learning_rate": 0.001,
+    "optimizer": "sgd",
+    "momentum": 0.9999,
+    "batch_size": 2
+  },
+  "neptune": {
+    "activate": false,
+    "hw_metrics_active": false,
+    "project": "marcomameli1992/Pix2Mesh-PT3D",
+    "api_token": "eyJhcGlfYWRkcmVzcyI6Imh0dHBzOi8vYXBwLm5lcHR1bmUuYWkiLCJhcGlfdXJsIjoiaHR0cHM6Ly9hcHAubmVwdHVuZS5haSIsImFwaV9rZXkiOiJkZWJkNDEyYS01NjI0LTRjMDAtODI5Yi0wMzI4NWU5NDc0ZmMifQ=="
+  },
+  "w&b": {
+    "activate": true,
+    "project": "pixel2mesh-pytorch3D",
+    "entity": "marcomameli01"
+  },
+  "starting_mesh": {
+    "path": "None",
+    "ico_sphere_subdivide_level": 5
+  }
+}
