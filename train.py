@@ -33,16 +33,22 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
         validation_dataloader: the validation data loader
     """
 
+    # model on GPU
+    device = "cuda:0" if cuda.is_available() else "cpu"
+    convolutional_model.to(device)
+    graph_model.to(device)
+
     #% Initialize experiment history.
     # Check for neptune
     run = None
     if config['neptune']['activate']:
+        neptune.create_experiment(send_hardware_metrics=config['neptune']['hw_metrics_active'])
         run = neptune.init(
             project=config['neptune']['project'],
             api_token=config['neptune']['api_token']
         )
     elif config['w&b']['activate']:
-        wandb.init(project=config['w&b']['project'], entity=config['w&b']['entity'])
+        run = wandb.init(project=config['w&b']['project'], entity=config['w&b']['entity'], reinit=True)
 
     # Number of parameters computation
     cnn_parameters = filter(lambda p: p.requires_grad, convolutional_model.parameters())
@@ -59,7 +65,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     if config['neptune']['activate']:
         run["parameters"] = params
     elif config['w&b']['activate']:
-        wandb.config(
+        wandb.config.update(
             params
         )
     # optmizer init
@@ -71,11 +77,6 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
         mesh_optimizare = optim.Adam(graph_model.parameters(), lr=config['training']['learning_rate'])
     else:
         raise NotImplementedError("Please in the config.json you have to specify an optimizer in [sgd, adam]")
-
-    # model on GPU
-    device = "cuda:0" if cuda.is_available() else "cpu"
-    convolutional_model.to(device)
-    graph_model.to(device)
 
     # Create the subdivision for label mesh
     subdivide = SubdivideMeshes()
@@ -89,17 +90,17 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
             mesh_optimizare.zero_grad()
             
             # forward + backward + optimize
-            conv16, conv32, conv64, conv128, conv256, conv512 = convolutional_model(data['image'])
+            conv16, conv32, conv64, conv128, conv256, conv512 = convolutional_model(data['image'].type(torch.float32).to(device))
 
             mesh1_loss_on_batch = 0.0
             mesh2_loss_on_batch = 0.0
             mesh3_loss_on_batch = 0.0
-            if len(conv16.shape()) == 4 or len(conv32.shape()) == 4 or len(conv64.shape()) == 4 or \
-                    len(conv128.shape()) == 4 or len(conv256.shape()) == 4 or len(conv512.shape()) == 4:
+            if len(conv16.shape) == 4 or len(conv32.shape) == 4 or len(conv64.shape) == 4 or \
+                    len(conv128.shape) == 4 or len(conv256.shape) == 4 or len(conv512.shape) == 4:
                 # Batch size different from 1
-                for i in conv64.shape()[0]:
+                for i in range(conv64.shape[0]):
                     # opening mesh for the image in the batch
-                    label_mesh_path = data['img_path'].replace(config['img_base_path'], config['obj_base_path']).replace(
+                    label_mesh_path = data['img_path'][i].replace(config['img_base_path'], config['obj_base_path']).replace(
                         '/rendering/' + config['img_name'] + '.png', '/models/' + config['obj_name'] + '.obj')
 
                     # Read the target 3D model using load_obj
