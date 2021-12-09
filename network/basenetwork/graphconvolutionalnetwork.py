@@ -63,30 +63,42 @@ class GraphConvolutional(Module):
         
         # Get The new Meshes
         mesh1 = mesh = Meshes(verts=[vertices1], faces=mesh.faces_list())
+
+        # Free memory for unusefull data
+        del vertices1
+        del features1
         
         # Mesh density increase
-        mesh, new_features1 = self.gp1(mesh, features1)
-        
+        mesh = self.gp1(mesh)
+
         # Vertex projection on features
         vertex_feature_from_conv_128 = vert_align(conv_features_128, mesh)
-        
+
         # Apply Graph Convolution
         vertices2, features2 = self.gb2(vertex_feature_from_conv_128[0], mesh.edges_packed())
         
         # Get The new Meshes
         mesh2 = mesh = Meshes(verts=[vertices2], faces=mesh.faces_list())
+
+        # Free memory for unusefull data
+        del vertices2
+        del features2
         
         # Mesh density increase
-        mesh, new_features2 = self.gp2(mesh, features2)
+        mesh = self.gp2(mesh)
         
         # Vertex projection on features
         vertex_feature_from_conv_256 = vert_align(conv_features_256, mesh)
         
         # Apply Graph Convolution
         vertices3, features3 = self.gb3(vertex_feature_from_conv_256[0], mesh.edges_packed())
-        
+
         # Get The new Meshes
-        mesh3 = mesh = Meshes(verts=[vertices3], faces=mesh.faces_list())
+        mesh3 = Meshes(verts=[vertices3], faces=mesh.faces_list())
+
+        # Free memory for unusefull data
+        del vertices3
+        del features3
         
         return mesh1, mesh2, mesh3
     
