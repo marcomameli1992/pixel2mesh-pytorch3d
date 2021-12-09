@@ -11,6 +11,7 @@ from torchvision import transforms
 from pytorch3d.structures.meshes import join_meshes_as_batch
 from pytorch3d.io import load_objs_as_meshes, load_obj
 from skimage.io import imread
+from skimage.transform import resize
 import os
 
 class ShapeNetDataset(Dataset):
@@ -57,6 +58,7 @@ class ShapeNetDataset(Dataset):
         #% Get the item from dataset: Image and Obj
 
         image = imread(self.img_list[item].strip())
+        image = resize(image, (224, 224))
         image = self.transform(image)
 
         data = {}
