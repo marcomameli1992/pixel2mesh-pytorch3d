@@ -181,6 +181,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     chamfer1 = l3d.chamfer_distance(point_mesh1, point_label_mesh1)
                     chamfer2 = l3d.chamfer_distance(point_mesh2, point_label_mesh2)
                     chamfer3 = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
+                    print(type(chamfer1))
+                    print(type(chamfer2))
+                    print(type(chamfer3))
+                    print(type(config['loss_weights']['chamfer']))
                     mesh1_loss_on_batch += chamfer1 * config['loss_weights']['chamfer']
                     mesh2_loss_on_batch += chamfer2 * config['loss_weights']['chamfer']
                     mesh3_loss_on_batch += chamfer3 * config['loss_weights']['chamfer']
