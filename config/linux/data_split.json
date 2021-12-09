@@ -1,0 +1,7 @@
+{
+  "start_folder": "/home/vrai/ComputerGraphicsResearch/meshgeneration/Dataset/ShapeNet/ShapeNetP2M/",
+  "image_name": "00.png",
+  "save_folder": "/home/vrai/ComputerGraphicsResearch/meshgeneration/pixel2mesh/data/datasetmanagement/data_list/",
+  "test_percentage": 0.2,
+  "validation_percentage": 0.1
+}

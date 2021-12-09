@@ -73,7 +73,7 @@ class ShapeNetDataset(Dataset):
 
 if __name__ == "__main__":
     from torch.utils.data import DataLoader
-    dataset = ShapeNetDataset(dataset_file_path='/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/pixel2mesh/data/datasetmanagement/data_list/', img_dataset_path="/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetP2M", model_dataset_path="/mnt/e/Progetti/ComputerGraphics/LandscapeGeneration-Vienna/MeshNetwork/Dataset/ShapeNet/ShapeNetCorev2", img_name='00', split='test')
+    dataset = ShapeNetDataset(dataset_file_path='/home/vrai/ComputerGraphicsResearch/meshgeneration/pixel2mesh/data/datasetmanagement/data_list/', img_dataset_path="/home/vrai/ComputerGraphicsResearch/meshgeneration/Dataset/ShapeNet/ShapeNetP2M", model_dataset_path="/home/vrai/ComputerGraphicsResearch/meshgeneration/Dataset/ShapeNet/ShapeNetCore", img_name='00', split='test')
     dataloader = DataLoader(dataset=dataset, batch_size=2)
     img = next(iter(dataloader))
     print(img['image'].shape,img['img_path'], img['class']) # the dictionary has the image element has tensor of image tensor and the img_path as list of string
