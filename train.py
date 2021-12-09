@@ -156,6 +156,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
 
                     mesh1, mesh2, mesh3 = graph_model(mesh, conv64[i].unsqueeze(0), conv128[i].unsqueeze(0), conv256[i].unsqueeze(0))
 
+                    print(torch.any(mesh1.verts_list()[0].isnan()))
+                    print(torch.any(mesh2.verts_list()[0].isnan()))
+                    print(torch.any(mesh3.verts_list()[0].isnan()))
+
                     print(mesh1.verts_list()[0].shape)
                     print(mesh2.verts_list()[0].shape)
                     print(mesh3.verts_list()[0].shape)
