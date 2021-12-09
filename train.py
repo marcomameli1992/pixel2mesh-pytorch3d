@@ -65,9 +65,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     if config['neptune']['activate']:
         run["parameters"] = params
     elif config['w&b']['activate']:
-        wandb.config.update(
-            params
-        )
+        wandb.config = params
     # optmizer init
     if config['training']['optimizer'] == "sgd":
         image_optimizer = optim.SGD(convolutional_model.parameters(), lr=config['training']['learning_rate'], momentum=config['training']['momentum'])
