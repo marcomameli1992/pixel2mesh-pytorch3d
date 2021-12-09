@@ -113,6 +113,8 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     verts = verts.to(device)
                     print(verts.shape)
 
+                    print(verts.shape)
+
                     # We scale normalize and center the target mesh to fit in a sphere of radius 1 centered at (0,0,0).
                     # (scale, center) will be used to bring the predicted mesh to its original center and scale
                     # Note that normalizing the target mesh, speeds up the optimization but is not necessary!
