@@ -5,6 +5,7 @@
   "img_base_path": "/home/vrai/ComputerGraphicsResearch/meshgeneration/Dataset/ShapeNet/ShapeNetP2M/",
   "data_file_list": "./data/datasetmanagement/data_list/",
   "save_obj": "./data/saving/",
+  "point_sampling_value": 3500,
   "convolutional_network": {
     "pooling": false,
     "pooling_type": "Max"
