@@ -169,6 +169,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     print(mesh2.verts_list()[0].shape)
                     print(mesh3.verts_list()[0].shape)
 
+                    torch.save(mesh1.verts_list(), config["save_obj"] + f'mesh1_{i}.pt')
+                    torch.save(mesh2.verts_list(), config["save_obj"] + f'mesh2_{i}.pt')
+                    torch.save(mesh3.verts_list(), config["save_obj"] + f'mesh3_{i}.pt')
+
                     # point cloud conversion
                     point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=config['point_sampling_value'])
                     point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=config['point_sampling_value'])
