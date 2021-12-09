@@ -225,7 +225,20 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                         run["train/normal_loss_3"].log(normal3)
                     elif config['w&b']['activate']:
                         wandb.log(
-                            loss
+                            {
+                                'train_chamfer_distance_1': chamfer1,
+                                'train_chamfer_distance_2': chamfer2,
+                                'train_chamfer_distance_3': chamfer3,
+                                'train_edge_loss_1': edge1,
+                                'train_edge_loss_2': edge2,
+                                'train_edge_loss_3': edge3,
+                                'train_laplacia_loss_1': laplacian1,
+                                'train_laplacia_loss_2': laplacian2,
+                                'train_laplacia_loss_3': laplacian3,
+                                'train_normal_loss_1': normal1,
+                                'train_normal_loss_2': normal2,
+                                'train_normal_loss_3': normal3
+                            }
                         )
 
                 # TODO insert the graphs for the reconstruction
