@@ -267,9 +267,9 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
 
                 # TODO insert the graphs for the reconstruction
 
-                mesh1_loss_on_batch = mesh1_loss_on_batch / conv64[i].shape()[0]
-                mesh2_loss_on_batch = mesh2_loss_on_batch / conv128[i].shape()[0]
-                mesh3_loss_on_batch = mesh3_loss_on_batch / conv256[i].shape()[0]
+                mesh1_loss_on_batch = mesh1_loss_on_batch / conv64[i].shape[0]
+                mesh2_loss_on_batch = mesh2_loss_on_batch / conv128[i].shape[0]
+                mesh3_loss_on_batch = mesh3_loss_on_batch / conv256[i].shape[0]
             else:
                 raise NotImplementedError("At the moment of the code creation the batch is not supported by pytorch3d v 0.5.0.\n" +
                                           "Please contact the developer at mameli.1.marco@gmail.com with object PyTorch3D Pixel2Mesh Re-Implementation" +
