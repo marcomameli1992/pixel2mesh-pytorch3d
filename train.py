@@ -161,6 +161,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     print(torch.any(mesh2.verts_list()[0].isnan()))
                     print(torch.any(mesh3.verts_list()[0].isnan()))
 
+                    print(mesh1.verts_list()[0].isnan())
+                    print(mesh2.verts_list()[0].isnan())
+                    print(mesh3.verts_list()[0].isnan())
+
                     print(mesh1.verts_list()[0].shape)
                     print(mesh2.verts_list()[0].shape)
                     print(mesh3.verts_list()[0].shape)
