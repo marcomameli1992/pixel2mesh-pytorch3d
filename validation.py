@@ -15,7 +15,9 @@ from pytorch3d.ops.sample_points_from_meshes import sample_points_from_meshes
 import neptune.new as neptune
 from utils.plotting import plot_pointcloud
 
-def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, validation_dataloader: DataLoader, device:str, run=None) -> None:
+
+def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, validation_dataloader: DataLoader,
+               device: str, run=None) -> float:
     """
     The validation function for validation step during the training
     Args:
@@ -38,8 +40,6 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
 
             # forward + backward + optimize
             conv16, conv32, conv64, conv128, conv256, conv512 = convolutional_model(data['image'])
-
-
 
             if len(conv16.shape()) == 4 or len(conv32.shape()) == 4 or len(conv64.shape()) == 4 or \
                     len(conv128.shape()) == 4 or len(conv256.shape()) == 4 or len(conv512.shape()) == 4:
@@ -121,7 +121,7 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
                     chamfer3 = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
 
                     # Evaluate
-                    point_medhe_edge_distance_1 = l3d.point_mesh_edge_distance([mesh1],[point_mesh1])
+                    point_medhe_edge_distance_1 = l3d.point_mesh_edge_distance([mesh1], [point_mesh1])
                     point_medhe_edge_distance_2 = l3d.point_mesh_edge_distance([mesh2], [point_mesh2])
                     point_medhe_edge_distance_3 = l3d.point_mesh_edge_distance([mesh3], [point_mesh3])
 
@@ -162,7 +162,8 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
                             evaluate
                         )
                         # saving mesh to file for the logging
-                        save_obj(f=config['save_obj'] + 'generated_mesh1.obj', verts=mesh1.verts_list(), faces=mesh1.faces_list())
+                        save_obj(f=config['save_obj'] + 'generated_mesh1.obj', verts=mesh1.verts_list(),
+                                 faces=mesh1.faces_list())
                         save_obj(f=config['save_obj'] + 'generated_mesh2.obj', verts=mesh2.verts_list(),
                                  faces=mesh2.faces_list())
                         save_obj(f=config['save_obj'] + 'generated_mesh3.obj', verts=mesh3.verts_list(),
@@ -173,11 +174,16 @@ def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, v
                                  faces=label_mesh3.faces_list())
                         wandb.log({
                             "validation_label_mesh1": wandb.Object3D(open(label_mesh_path)),
-                            "validation_label_mesh2": wandb.Object3D(open(config['save_obj'] + 'subdivided_label_mesh1.obj')),
-                            "validation_label_mesh3": wandb.Object3D(open(config['save_obj'] + 'subdivided_label_mesh2.obj')),
-                            "validation_generated_mesh1": wandb.Object3D(open(config['save_obj'] + 'generated_mesh1.obj')),
+                            "validation_label_mesh2": wandb.Object3D(
+                                open(config['save_obj'] + 'subdivided_label_mesh1.obj')),
+                            "validation_label_mesh3": wandb.Object3D(
+                                open(config['save_obj'] + 'subdivided_label_mesh2.obj')),
+                            "validation_generated_mesh1": wandb.Object3D(
+                                open(config['save_obj'] + 'generated_mesh1.obj')),
                             "validation_generated_mesh2": wandb.Object3D(
                                 open(config['save_obj'] + 'generated_mesh2.obj')),
                             "validation_generated_mesh3": wandb.Object3D(
                                 open(config['save_obj'] + 'generated_mesh3.obj')),
                         })
+
+    return 0.1
