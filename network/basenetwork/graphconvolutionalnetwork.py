@@ -65,8 +65,8 @@ class GraphConvolutional(Module):
         mesh1 = mesh = Meshes(verts=[vertices1], faces=mesh.faces_list())
 
         # Free memory for unusefull data
-        del vertices1
-        del features1
+        #del vertices1
+        #del features1
         
         # Mesh density increase
         mesh = self.gp1(mesh)
@@ -81,8 +81,8 @@ class GraphConvolutional(Module):
         mesh2 = mesh = Meshes(verts=[vertices2], faces=mesh.faces_list())
 
         # Free memory for unusefull data
-        del vertices2
-        del features2
+        #del vertices2
+        #del features2
         
         # Mesh density increase
         mesh = self.gp2(mesh)
@@ -97,8 +97,8 @@ class GraphConvolutional(Module):
         mesh3 = Meshes(verts=[vertices3], faces=mesh.faces_list())
 
         # Free memory for unusefull data
-        del vertices3
-        del features3
+        #del vertices3
+        #del features3
         
         return mesh1, mesh2, mesh3
     
