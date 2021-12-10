@@ -138,6 +138,11 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     print("label_mesh2 nan verts tensor: ", torch.any(label_mesh2.verts_list()[0].isnan()))
                     print("label_mesh3 nan verts tensor: ", torch.any(label_mesh3.verts_list()[0].isnan()))
 
+                    print("label_mesh1 area: ", label_mesh1.faces_areas_packed().max())
+                    print("label_mesh2 area: ", label_mesh2.faces_areas_packed().max())
+                    print("label_mesh3 area: ", label_mesh3.faces_areas_packed().max())
+
+
                     #print("label_mesh1 nan verts tensor: ", label_mesh1.verts_list()[0].isnan())
                     #print("label_mesh2 nan verts tensor: ", label_mesh2.verts_list()[0].isnan())
                     #print("label_mesh3 nan verts tensor: ", label_mesh3.verts_list()[0].isnan())
@@ -182,6 +187,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     print("generated_mesh1 verts tensor: ", mesh1.verts_list()[0].shape)
                     print("generated_mesh2 verts tensor: ", mesh2.verts_list()[0].shape)
                     print("generated_mesh3 verts tensor: ", mesh3.verts_list()[0].shape)
+
+                    print("generated_mesh1 area: ", mesh1.faces_areas_packed().max())
+                    print("generated_mesh2 area: ", mesh2.faces_areas_packed().max())
+                    print("generated_mesh3 area: ", mesh3.faces_areas_packed().max())
 
                     torch.save(mesh1.verts_list(), config["save_obj"] + f'mesh1_{i}.pt')
                     torch.save(mesh2.verts_list(), config["save_obj"] + f'mesh2_{i}.pt')
