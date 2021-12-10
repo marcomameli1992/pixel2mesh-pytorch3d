@@ -274,9 +274,12 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                                           "Please contact the developer at mameli.1.marco@gmail.com with object PyTorch3D Pixel2Mesh Re-Implementation" +
                                           "and asck for code updates")
             # backpropagation # TODO understand the backpropagation see https://pytorch3d.org/tutorials/deform_source_mesh_to_target_mesh
-            mesh1_loss_on_batch.backward()
-            mesh2_loss_on_batch.backward()
-            mesh3_loss_on_batch.backward()
+            mesh_loss_on_batch = mesh1_loss_on_batch + mesh2_loss_on_batch + mesh3_loss_on_batch
+            #mesh1_loss_on_batch.backward()
+            #mesh2_loss_on_batch.backward()
+            #mesh3_loss_on_batch.backward()
+
+            mesh_loss_on_batch.backward()
 
             image_optimizer.step()
             mesh_optimizare.step()
