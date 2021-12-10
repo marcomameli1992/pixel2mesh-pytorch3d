@@ -34,7 +34,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     """
 
     # model on GPU
-    device = torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")#torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
     convolutional_model.to(device)
     graph_model.to(device)
 
