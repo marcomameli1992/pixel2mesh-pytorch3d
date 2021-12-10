@@ -4,3 +4,7 @@ config/config-use.json
 network/basenetwork/__pycache__/
 
 __pycache__/
+
+wandb/
+
+.neptune/

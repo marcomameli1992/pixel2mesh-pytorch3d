@@ -34,7 +34,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     """
 
     # model on GPU
-    device = torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")#torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
     convolutional_model.to(device)
     graph_model.to(device)
 
@@ -114,7 +114,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     verts = verts.to(device)
                     print(verts.shape)
 
-                    print(verts.shape)
+                    print("label_mesh1 verts tensor: ", verts.shape)
 
                     # We scale normalize and center the target mesh to fit in a sphere of radius 1 centered at (0,0,0).
                     # (scale, center) will be used to bring the predicted mesh to its original center and scale
@@ -131,6 +131,17 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # Subdivide label mesh for the losses
                     label_mesh2 = subdivide(label_mesh1)
                     label_mesh3 = subdivide(label_mesh2)
+
+                    print("label_mesh2 verts tensor: ", label_mesh2.verts_list()[0].shape)
+                    print("label_mesh3 verts tensor: ", label_mesh3.verts_list()[0].shape)
+
+                    print("label_mesh1 nan verts tensor: ", torch.any(label_mesh1.verts_list()[0].isnan()))
+                    print("label_mesh2 nan verts tensor: ", torch.any(label_mesh2.verts_list()[0].isnan()))
+                    print("label_mesh3 nan verts tensor: ", torch.any(label_mesh3.verts_list()[0].isnan()))
+
+                    #print("label_mesh1 nan verts tensor: ", label_mesh1.verts_list()[0].isnan())
+                    #print("label_mesh2 nan verts tensor: ", label_mesh2.verts_list()[0].isnan())
+                    #print("label_mesh3 nan verts tensor: ", label_mesh3.verts_list()[0].isnan())
 
                     if config['starting_mesh']['path'] != "None":
                         # Read the target 3D model using load_obj
@@ -158,17 +169,20 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
 
                     mesh1, mesh2, mesh3 = graph_model(mesh, conv64[i].unsqueeze(0), conv128[i].unsqueeze(0), conv256[i].unsqueeze(0))
 
-                    print(torch.any(mesh1.verts_list()[0].isnan()))
-                    print(torch.any(mesh2.verts_list()[0].isnan()))
-                    print(torch.any(mesh3.verts_list()[0].isnan()))
+                    # compute area of the meshes
 
-                    print(mesh1.verts_list()[0].isnan())
-                    print(mesh2.verts_list()[0].isnan())
-                    print(mesh3.verts_list()[0].isnan())
 
-                    print(mesh1.verts_list()[0].shape)
-                    print(mesh2.verts_list()[0].shape)
-                    print(mesh3.verts_list()[0].shape)
+                    print("generated_mesh1 nan verts tensor: ", torch.any(mesh1.verts_list()[0].isnan()))
+                    print("generated_mesh2 nan verts tensor: ", torch.any(mesh2.verts_list()[0].isnan()))
+                    print("generated_mesh3 nan verts tensor: ", torch.any(mesh3.verts_list()[0].isnan()))
+
+                    #print("generated_mesh1 nan verts tensor: ", mesh1.verts_list()[0].isnan())
+                    #print("generated_mesh2 nan verts tensor: ", mesh2.verts_list()[0].isnan())
+                    #print("generated_mesh3 nan verts tensor: ", mesh3.verts_list()[0].isnan())
+
+                    print("generated_mesh1 verts tensor: ", mesh1.verts_list()[0].shape)
+                    print("generated_mesh2 verts tensor: ", mesh2.verts_list()[0].shape)
+                    print("generated_mesh3 verts tensor: ", mesh3.verts_list()[0].shape)
 
                     torch.save(mesh1.verts_list(), config["save_obj"] + f'mesh1_{i}.pt')
                     torch.save(mesh2.verts_list(), config["save_obj"] + f'mesh2_{i}.pt')
@@ -187,10 +201,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     chamfer1, _ = l3d.chamfer_distance(point_mesh1, point_label_mesh1)
                     chamfer2, _ = l3d.chamfer_distance(point_mesh2, point_label_mesh2)
                     chamfer3, _ = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
-                    print(type(chamfer1))
-                    print(type(chamfer2))
-                    print(type(chamfer3))
-                    print(type(config['loss_weights']['chamfer']))
+
                     mesh1_loss_on_batch += chamfer1 * config['loss_weights']['chamfer']
                     mesh2_loss_on_batch += chamfer2 * config['loss_weights']['chamfer']
                     mesh3_loss_on_batch += chamfer3 * config['loss_weights']['chamfer']
@@ -275,9 +286,12 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                                           "Please contact the developer at mameli.1.marco@gmail.com with object PyTorch3D Pixel2Mesh Re-Implementation" +
                                           "and asck for code updates")
             # backpropagation # TODO understand the backpropagation see https://pytorch3d.org/tutorials/deform_source_mesh_to_target_mesh
-            mesh1_loss_on_batch.backward()
-            mesh2_loss_on_batch.backward()
-            mesh3_loss_on_batch.backward()
+            mesh_loss_on_batch = mesh1_loss_on_batch + mesh2_loss_on_batch + mesh3_loss_on_batch
+            #mesh1_loss_on_batch.backward()
+            #mesh2_loss_on_batch.backward()
+            #mesh3_loss_on_batch.backward()
+
+            mesh_loss_on_batch.backward()
 
             image_optimizer.step()
             mesh_optimizare.step()
