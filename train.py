@@ -138,9 +138,9 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     print("label_mesh2 nan verts tensor: ", torch.any(label_mesh2.verts_list()[0].isnan()))
                     print("label_mesh3 nan verts tensor: ", torch.any(label_mesh3.verts_list()[0].isnan()))
 
-                    print("label_mesh1 nan verts tensor: ", label_mesh1.verts_list()[0].isnan())
-                    print("label_mesh2 nan verts tensor: ", label_mesh2.verts_list()[0].isnan())
-                    print("label_mesh3 nan verts tensor: ", label_mesh3.verts_list()[0].isnan())
+                    #print("label_mesh1 nan verts tensor: ", label_mesh1.verts_list()[0].isnan())
+                    #print("label_mesh2 nan verts tensor: ", label_mesh2.verts_list()[0].isnan())
+                    #print("label_mesh3 nan verts tensor: ", label_mesh3.verts_list()[0].isnan())
 
                     if config['starting_mesh']['path'] != "None":
                         # Read the target 3D model using load_obj
@@ -172,9 +172,9 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     print("generated_mesh2 nan verts tensor: ", torch.any(mesh2.verts_list()[0].isnan()))
                     print("generated_mesh3 nan verts tensor: ", torch.any(mesh3.verts_list()[0].isnan()))
 
-                    print("generated_mesh1 nan verts tensor: ", mesh1.verts_list()[0].isnan())
-                    print("generated_mesh2 nan verts tensor: ", mesh2.verts_list()[0].isnan())
-                    print("generated_mesh3 nan verts tensor: ", mesh3.verts_list()[0].isnan())
+                    #print("generated_mesh1 nan verts tensor: ", mesh1.verts_list()[0].isnan())
+                    #print("generated_mesh2 nan verts tensor: ", mesh2.verts_list()[0].isnan())
+                    #print("generated_mesh3 nan verts tensor: ", mesh3.verts_list()[0].isnan())
 
                     print("generated_mesh1 verts tensor: ", mesh1.verts_list()[0].shape)
                     print("generated_mesh2 verts tensor: ", mesh2.verts_list()[0].shape)
@@ -197,7 +197,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     chamfer1, _ = l3d.chamfer_distance(point_mesh1, point_label_mesh1)
                     chamfer2, _ = l3d.chamfer_distance(point_mesh2, point_label_mesh2)
                     chamfer3, _ = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
-                    
+
                     mesh1_loss_on_batch += chamfer1 * config['loss_weights']['chamfer']
                     mesh2_loss_on_batch += chamfer2 * config['loss_weights']['chamfer']
                     mesh3_loss_on_batch += chamfer3 * config['loss_weights']['chamfer']
