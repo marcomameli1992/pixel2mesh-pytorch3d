@@ -34,7 +34,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     """
 
     # model on GPU
-    device = torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
+    device = torch.device("cpu")#torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
     convolutional_model.to(device)
     graph_model.to(device)
 
@@ -167,6 +167,9 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                         mesh = ico_sphere(level=config['starting_mesh']['ico_sphere_subdivide_level'], device=device)
 
                     mesh1, mesh2, mesh3 = graph_model(mesh, conv64[i].unsqueeze(0), conv128[i].unsqueeze(0), conv256[i].unsqueeze(0))
+
+                    # compute area of the meshes
+
 
                     print("generated_mesh1 nan verts tensor: ", torch.any(mesh1.verts_list()[0].isnan()))
                     print("generated_mesh2 nan verts tensor: ", torch.any(mesh2.verts_list()[0].isnan()))
