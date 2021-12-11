@@ -82,7 +82,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     # define the optimizer
     for epoch in tqdm.tqdm(range(config['training']['epochs'])):
         validation_loss = 0.0
-        for i, data in enumerate(train_dataloader):
+        for i, data in tqdm.tqdm(enumerate(train_dataloader)):
             # reset grad
             image_optimizer.zero_grad()
             mesh_optimizare.zero_grad()
