@@ -34,7 +34,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
     """
 
     # model on GPU
-    device = torch.device("cpu")#torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
+    device = torch.device("cuda:0") if cuda.is_available() else torch.device("cpu")
     convolutional_model.to(device)
     graph_model.to(device)
 
@@ -93,6 +93,11 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
             mesh1_loss_on_batch = 0.0
             mesh2_loss_on_batch = 0.0
             mesh3_loss_on_batch = 0.0
+
+            penalty1 = 1.0
+            penalty2 = 1.0
+            penalty3 = 1.0
+
             if len(conv16.shape) == 4 or len(conv32.shape) == 4 or len(conv64.shape) == 4 or \
                     len(conv128.shape) == 4 or len(conv256.shape) == 4 or len(conv512.shape) == 4:
                 # Batch size different from 1
@@ -198,6 +203,16 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     torch.save(mesh2.verts_list(), config["save_obj"] + f'mesh2_{i}.pt')
                     torch.save(mesh3.verts_list(), config["save_obj"] + f'mesh3_{i}.pt')
 
+                    if mesh1.faces_areas_packed().max() == 0 and mesh2.faces_areas_packed().max() != 0 and mesh3.faces_areas_packed().max() != 0:
+                        mesh1 = mesh2
+                        penalty1 = 100.0
+                    if mesh1.faces_areas_packed().max() != 0 and mesh2.faces_areas_packed().max() == 0 and mesh3.faces_areas_packed().max() != 0:
+                        mesh2 = mesh3
+                        penalty2 = 100.0
+                    if mesh1.faces_areas_packed().max() != 0 and mesh2.faces_areas_packed().max() != 0 and mesh3.faces_areas_packed().max() == 0:
+                        mesh3 = mesh2
+                        penalty3 = 100.0
+
                     # point cloud conversion
                     point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=config['point_sampling_value'])
                     point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=config['point_sampling_value'])
@@ -212,33 +227,33 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     chamfer2, _ = l3d.chamfer_distance(point_mesh2, point_label_mesh2)
                     chamfer3, _ = l3d.chamfer_distance(point_mesh3, point_label_mesh3)
 
-                    mesh1_loss_on_batch += chamfer1 * config['loss_weights']['chamfer']
-                    mesh2_loss_on_batch += chamfer2 * config['loss_weights']['chamfer']
-                    mesh3_loss_on_batch += chamfer3 * config['loss_weights']['chamfer']
+                    mesh1_loss_on_batch += chamfer1 * config['loss_weights']['chamfer'] * penalty1
+                    mesh2_loss_on_batch += chamfer2 * config['loss_weights']['chamfer'] * penalty2
+                    mesh3_loss_on_batch += chamfer3 * config['loss_weights']['chamfer'] * penalty3
 
                     # edge smooth
                     edge1 = l3d.mesh_edge_loss(mesh1)
                     edge2 = l3d.mesh_edge_loss(mesh2)
                     edge3 = l3d.mesh_edge_loss(mesh3)
-                    mesh1_loss_on_batch += edge1 * config['loss_weights']['edge']
-                    mesh2_loss_on_batch += edge2 * config['loss_weights']['edge']
-                    mesh3_loss_on_batch += edge3 * config['loss_weights']['edge']
+                    mesh1_loss_on_batch += edge1 * config['loss_weights']['edge'] * penalty1
+                    mesh2_loss_on_batch += edge2 * config['loss_weights']['edge'] * penalty2
+                    mesh3_loss_on_batch += edge3 * config['loss_weights']['edge'] * penalty3
 
                     # laplacian smooth
                     laplacian1 = l3d.mesh_laplacian_smoothing(mesh1)
                     laplacian2 = l3d.mesh_laplacian_smoothing(mesh2)
                     laplacian3 = l3d.mesh_laplacian_smoothing(mesh3)
-                    mesh1_loss_on_batch += laplacian1 * config['loss_weights']['laplacian']
-                    mesh2_loss_on_batch += laplacian2 * config['loss_weights']['laplacian']
-                    mesh3_loss_on_batch += laplacian3 * config['loss_weights']['laplacian']
+                    mesh1_loss_on_batch += laplacian1 * config['loss_weights']['laplacian'] * penalty1
+                    mesh2_loss_on_batch += laplacian2 * config['loss_weights']['laplacian'] * penalty2
+                    mesh3_loss_on_batch += laplacian3 * config['loss_weights']['laplacian'] * penalty3
 
                     # normal convalidation
                     normal1 = l3d.mesh_normal_consistency(mesh1)
                     normal2 = l3d.mesh_normal_consistency(mesh2)
                     normal3 = l3d.mesh_normal_consistency(mesh3)
-                    mesh1_loss_on_batch += normal1 * config['loss_weights']['normal']
-                    mesh2_loss_on_batch += normal2 * config['loss_weights']['normal']
-                    mesh3_loss_on_batch += normal3 * config['loss_weights']['normal']
+                    mesh1_loss_on_batch += normal1 * config['loss_weights']['normal'] * penalty1
+                    mesh2_loss_on_batch += normal2 * config['loss_weights']['normal'] * penalty2
+                    mesh3_loss_on_batch += normal3 * config['loss_weights']['normal'] * penalty3
 
                     loss = {
                         'chamfer_distance_1': chamfer1,
