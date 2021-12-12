@@ -17,7 +17,7 @@ from utils.plotting import plot_pointcloud
 
 
 def validation(config, convolutional_model: nn.Module, graph_model: nn.Module, validation_dataloader: DataLoader,
-               device: str, run=None) -> float:
+               device, run=None) -> float:
     """
     The validation function for validation step during the training
     Args:
