@@ -222,6 +222,11 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                         mesh2 = mesh1
                         penalty3 = 100.0
                         penalty2 = 100.0
+                    if mesh1.faces_areas_packed().max() == 0 and mesh2.faces_areas_packed().max() != 0 and mesh3.faces_areas_packed().max() == 0:
+                        mesh1 = mesh2
+                        mesh3 = mesh2
+                        penalty1 = 100.0
+                        penalty2 = 100.0
                     # point cloud conversion
                     point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=config['point_sampling_value'])
                     point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=config['point_sampling_value'])
