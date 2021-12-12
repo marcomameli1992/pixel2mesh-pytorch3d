@@ -140,6 +140,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
 
                     if config['debug']:
 
+                        print("label_mesh1 verts tensor: ", label_mesh1.verts_list()[0].shape)
                         print("label_mesh2 verts tensor: ", label_mesh2.verts_list()[0].shape)
                         print("label_mesh3 verts tensor: ", label_mesh3.verts_list()[0].shape)
 
