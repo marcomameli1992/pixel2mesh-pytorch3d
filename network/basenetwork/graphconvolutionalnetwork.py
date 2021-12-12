@@ -62,7 +62,7 @@ class GraphConvolutional(Module):
         vertices1, features1 = self.gb1(vertex_feature_from_conv_64[0], mesh.edges_packed())
         
         # Get The new Meshes
-        mesh1 = mesh = Meshes(verts=[vertices1], faces=mesh.faces_list())
+        mesh1 = mesh = Meshes(verts=[vertices1], faces=[mesh.faces_packed()])
 
         # Free memory for unusefull data
         #del vertices1
@@ -78,7 +78,7 @@ class GraphConvolutional(Module):
         vertices2, features2 = self.gb2(vertex_feature_from_conv_128[0], mesh.edges_packed())
         
         # Get The new Meshes
-        mesh2 = mesh = Meshes(verts=[vertices2], faces=mesh.faces_list())
+        mesh2 = mesh = Meshes(verts=[vertices2], faces=[mesh.faces_packed()])
 
         # Free memory for unusefull data
         #del vertices2
@@ -94,7 +94,7 @@ class GraphConvolutional(Module):
         vertices3, features3 = self.gb3(vertex_feature_from_conv_256[0], mesh.edges_packed())
 
         # Get The new Meshes
-        mesh3 = Meshes(verts=[vertices3], faces=mesh.faces_list())
+        mesh3 = Meshes(verts=[vertices3], faces=[mesh.faces_packed()])
 
         # Free memory for unusefull data
         #del vertices3
