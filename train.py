@@ -102,7 +102,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     len(conv128.shape) == 4 or len(conv256.shape) == 4 or len(conv512.shape) == 4:
                 # Batch size different from 1
                 for i in range(conv64.shape[0]):
-                    print(f"Batch index: {i}")
+                    print(f"Epoch {epoch} - Batch index: {i}")
                     # opening mesh for the image in the batch
                     label_mesh_path = data['img_path'][i].replace(config['img_base_path'], config['obj_base_path']).replace(
                         '/rendering/' + config['img_name'] + '.png', '/models/' + config['obj_name'] + '.obj')
@@ -119,7 +119,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     verts = verts.to(device)
                     print(verts.shape)
 
-                    print("label_mesh1 verts tensor: ", verts.shape)
+                    #print("label_mesh1 verts tensor: ", verts.shape)
 
                     # We scale normalize and center the target mesh to fit in a sphere of radius 1 centered at (0,0,0).
                     # (scale, center) will be used to bring the predicted mesh to its original center and scale
