@@ -179,7 +179,8 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                         mesh = Meshes(verts=[verts], faces=[faces_idx])
                     else:
                         mesh = ico_sphere(level=config['starting_mesh']['ico_sphere_subdivide_level'], device=device)
-                        print("ico sphere area: ", mesh.faces_areas_packed().max())
+                        if config['debug']:
+                            print("ico sphere area: ", mesh.faces_areas_packed().max())
 
 
                     mesh1, mesh2, mesh3 = graph_model(mesh, conv64[i].unsqueeze(0), conv128[i].unsqueeze(0), conv256[i].unsqueeze(0))
