@@ -34,6 +34,6 @@ class GraphConvolutionalBlock(nn.Module):
         
         x = residual + x
         
-        vertices = self.activation(self.gc14(x, edges))
+        vertices = self.gc14(x, edges)
         
         return vertices, auxiliary
