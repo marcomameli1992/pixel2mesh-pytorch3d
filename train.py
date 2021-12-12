@@ -237,7 +237,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # point cloud conversion
                     point_label_mesh1 = sample_points_from_meshes(label_mesh1, num_samples=config['point_sampling_value'])
                     point_label_mesh2 = sample_points_from_meshes(label_mesh2, num_samples=config['point_sampling_value'])
-                    point_label_mesh3 = sample_points_from_meshes(label_mesh3, num_samples=config['point_sampling_value'])
+                    if label_mesh3.verts_list()[0].shape[0] >= 999000:
+                        point_label_mesh3 = point_label_mesh2
+                    else:
+                        point_label_mesh3 = sample_points_from_meshes(label_mesh3, num_samples=config['point_sampling_value'])
 
                     point_mesh1 = sample_points_from_meshes(mesh1, num_samples=config['point_sampling_value'])
                     point_mesh2 = sample_points_from_meshes(mesh2, num_samples=config['point_sampling_value'])
