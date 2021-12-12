@@ -119,7 +119,6 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # For this tutorial, normals and textures are ignored.
                     faces_idx = faces.verts_idx.to(device)
                     verts = verts.to(device)
-                    print(verts.shape)
 
                     #print("label_mesh1 verts tensor: ", verts.shape)
 
