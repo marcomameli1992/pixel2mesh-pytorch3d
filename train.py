@@ -102,12 +102,14 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     len(conv128.shape) == 4 or len(conv256.shape) == 4 or len(conv512.shape) == 4:
                 # Batch size different from 1
                 for i in range(conv64.shape[0]):
-                    print(f"Epoch {epoch} - Batch index: {i}")
+
                     # opening mesh for the image in the batch
                     label_mesh_path = data['img_path'][i].replace(config['img_base_path'], config['obj_base_path']).replace(
                         '/rendering/' + config['img_name'] + '.png', '/models/' + config['obj_name'] + '.obj')
 
-                    print(label_mesh_path)
+                    if config['debug']:
+                        print(f"Epoch {epoch} - Batch index: {i}")
+                        print(label_mesh_path)
 
                     # Read the target 3D model using load_obj
                     verts, faces, aux = load_obj(label_mesh_path)
