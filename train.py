@@ -108,6 +108,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # opening mesh for the image in the batch
                     label_mesh_path = data['img_path'][i].replace(config['img_base_path'], config['obj_base_path']).replace(
                         '/rendering/' + config['img_name'] + '.png', '/models/' + config['obj_name'] + '.obj')
+                    label_mesh_path = os.path.relpath(label_mesh_path, os.getcwd())
 
                     if config['debug']:
                         print(f"Epoch {epoch} - Batch index: {i}")
