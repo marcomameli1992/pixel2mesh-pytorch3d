@@ -3,6 +3,8 @@ Training function for the network configuration
 :author: Marco Mameli
 
 """
+import os.path
+
 import torch
 import wandb
 from pytorch3d.structures import Meshes
@@ -109,7 +111,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
 
                     if config['debug']:
                         print(f"Epoch {epoch} - Batch index: {i}")
-                        print(label_mesh_path)
+                        print(f"{label_mesh_path} is {os.path.isfile(label_mesh_path)}")
 
                     # Read the target 3D model using load_obj
                     verts, faces, aux = load_obj(label_mesh_path)
