@@ -115,7 +115,11 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                         print(f"{label_mesh_path} is {os.path.isfile(label_mesh_path)}")
 
                     # Read the target 3D model using load_obj
-                    verts, faces, aux = load_obj(label_mesh_path)
+                    try:
+                        verts, faces, aux = load_obj(label_mesh_path)
+                    except IsADirectoryError:
+                        with open(label_mesh_path, 'r') as obj_file:
+                            verts, faces, aux = load_obj(obj_file)
 
                     # verts is a FloatTensor of shape (V, 3) where V is the number of vertices in the mesh
                     # faces is an object which contains the following LongTensors: verts_idx, normals_idx and textures_idx
