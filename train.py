@@ -118,7 +118,10 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # Read the target 3D model using load_obj
                     try:
                         verts, faces, aux = load_obj(label_mesh_path)
-                    except IsADirectoryError or PIL.UnidentifiedImageError:
+                    except IsADirectoryError:
+                        with open(label_mesh_path, 'r') as obj_file:
+                            verts, faces, aux = load_obj(obj_file)
+                    except:
                         with open(label_mesh_path, 'r') as obj_file:
                             verts, faces, aux = load_obj(obj_file)
 
