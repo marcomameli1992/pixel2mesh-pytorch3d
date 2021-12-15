@@ -21,6 +21,7 @@ import neptune.new as neptune
 import numpy as np
 from validation import validation
 import tqdm
+import PIL
 
 #TODO Adding the possibility to pre-train the convolutional network
 
@@ -117,7 +118,7 @@ def train(config, convolutional_model: nn.Module, graph_model: nn.Module, train_
                     # Read the target 3D model using load_obj
                     try:
                         verts, faces, aux = load_obj(label_mesh_path)
-                    except IsADirectoryError:
+                    except IsADirectoryError or PIL.UnidentifiedImageError:
                         with open(label_mesh_path, 'r') as obj_file:
                             verts, faces, aux = load_obj(obj_file)
 
